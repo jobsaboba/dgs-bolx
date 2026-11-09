@@ -1,4 +1,4 @@
-# DGS Bollx — the consensus board
+# The Dogs Bollox — the consensus board
 
 Third phone app alongside Sandstorm and The Holy Grail (plus Jacobs Ladder).
 

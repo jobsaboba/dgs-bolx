@@ -1,6 +1,6 @@
 /* DGS Bollx — service worker (app shell cache; the consensus data is
    fetched live from the three sibling apps and never cached) */
-const CACHE = "bolxapp-v1";
+const CACHE = "bolxapp-v2";
 const SHELL = ["./", "./index.html", "./manifest.webmanifest",
                "./icons/icon-192.png", "./icons/icon-512.png"];
 

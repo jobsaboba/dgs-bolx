@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="google" content="notranslate">
 <meta name="theme-color" content="#0b1220">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Bollx">
-<title>DGS Bollx</title>
+<meta name="apple-mobile-web-app-title" content="Bollox">
+<title>The Dogs Bollox</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -75,7 +76,7 @@
   <div class="head">
     <img src="icons/icon-192.png" alt="">
     <div>
-      <h1>DGS BOLLX</h1>
+      <h1>THE DOGS BOLLOX</h1>
       <div class="sub">Sandstorm 🌪 · Holy Grail 🏆 · Jacobs Ladder 🪜 — checked fresh every open</div>
     </div>
   </div>
@@ -89,7 +90,7 @@
   <div id="body"><div class="note">checking all three apps…</div></div>
   <div class="foot" id="foot">© Dave Court · DGS Bollx v1.0</div>
 <script>
-const APP_VER = "1.0";
+const APP_VER = "1.1";
 const APPS = [
   { key: "S", cls: "c-a", name: "Sandstorm",
     url: d => `https://jobsaboba.github.io/wonderland/data/${d}.json` },
@@ -230,7 +231,7 @@ function render(dstr, list, badge){
     out = `<div class="note">no published picks for this day across the three apps yet</div>`;
   document.getElementById("body").innerHTML = out;
   document.getElementById("foot").innerHTML =
-    `© Dave Court · DGS Bollx v${APP_VER} · checked ${now} London`;
+    `© Dave Court · The Dogs Bollox v${APP_VER} · checked ${now} London`;
 }
 
 let DAY = null;

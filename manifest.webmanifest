@@ -1,8 +1,8 @@
 {
   "id": "/dgs-bolx/",
-  "name": "DGS Bollx",
-  "short_name": "Bollx",
-  "description": "The dogs bollocks consensus board: every published pick from Sandstorm, The Holy Grail and Jacobs Ladder, cross-checked live. Gold cup = all three apps picked it, silver = two, bronze = one.",
+  "name": "The Dogs Bollox",
+  "short_name": "Bollox",
+  "description": "The Dogs Bollox consensus board: every published pick from Sandstorm, The Holy Grail and Jacobs Ladder, cross-checked live. Gold cup = all three apps picked it, silver = two, bronze = one.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
