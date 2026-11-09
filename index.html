@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#0b1220">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bollx">
+<title>DGS Bollx</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>
+  :root{
+    --bg:#0b1220; --panel:#131c2e; --panel2:#0f172a; --line:#22304a;
+    --ink:#e7eef9; --dim:#8fa3bf; --sky:#38bdf8; --em:#10b981;
+    --sun:#f5e58b; --amb:#fbbf24; --red:#f87171;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  html,body{margin:0; padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:var(--bg); color:var(--ink); padding:10px 12px 26px;
+    max-width:540px; margin:0 auto;
+  }
+  .head{display:flex; align-items:center; gap:10px; padding:6px 2px 12px}
+  .head img{width:44px; height:44px; border-radius:10px}
+  .head h1{font-size:1.22rem; margin:0; letter-spacing:.5px}
+  .head .sub{color:var(--dim); font-size:.66rem; margin-top:2px}
+  .days{display:flex; gap:6px; overflow-x:auto; padding:2px 0 10px; scrollbar-width:none}
+  .days::-webkit-scrollbar{display:none}
+  .day{border:1px solid var(--line); background:var(--panel); color:var(--dim); border-radius:999px;
+    padding:6px 12px; font-size:.68rem; white-space:nowrap; cursor:pointer}
+  .day.on{background:var(--sky); border-color:var(--sky); color:#06202f; font-weight:700}
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-bottom:10px}
+  .stat{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:8px 4px; text-align:center}
+  .stat .v{font-size:1.25rem; font-weight:900}
+  .stat .l{font-size:.58rem; color:var(--dim); margin-top:2px; letter-spacing:.3px}
+  .g .v{color:#ffd54a} .sv .v{color:#cfd8e3} .bz .v{color:#e0a370} .tn .v{color:var(--dim)}
+  .legend{color:var(--dim); font-size:.64rem; margin:0 2px 12px; line-height:1.55}
+  .src{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px}
+  .src .s{border:1px solid var(--line); background:var(--panel); color:var(--dim);
+    border-radius:999px; padding:3px 9px; font-size:.64rem}
+  .src .s .k{font-weight:800; color:var(--ink)}
+  .src .s.bad{opacity:.55}
+  .rc{margin-bottom:14px}
+  .rc .h2{display:flex; justify-content:space-between; align-items:baseline;
+    border-bottom:1px solid var(--line); padding-bottom:6px; margin-bottom:2px}
+  .rc .h2 .t{font-weight:800; font-size:.86rem}
+  .rc .h2 .c{color:var(--dim); font-size:.62rem}
+  .row{display:flex; align-items:center; gap:10px; padding:8px 2px; border-bottom:1px solid var(--line)}
+  .row .m{width:34px; text-align:center; font-size:1.25rem; flex-shrink:0}
+  .row .who{flex:1; min-width:0}
+  .row .who .h{font-weight:800; font-size:.92rem}
+  .row .who .d{color:var(--dim); font-size:.62rem; margin-top:2px}
+  .chips{display:flex; gap:4px; flex-wrap:wrap; margin-top:3px}
+  .chip{font-size:.56rem; padding:1px 7px; border-radius:999px; font-weight:700; line-height:1.7}
+  .c-a{background:#3b3413; color:#f5e58b}
+  .c-b{background:#0d2740; color:#7dd3fc}
+  .c-d{background:#0c2b21; color:#6ee7b7}
+  .resb{font-size:.56rem; font-weight:900; padding:2px 8px; border-radius:999px; flex-shrink:0}
+  .resb.win{background:rgba(16,185,129,.14); color:#34d399}
+  .resb.place{background:rgba(251,191,36,.12); color:#fbbf24}
+  .resb.lose{background:rgba(239,68,68,.10); color:#f87171}
+  .odds{color:var(--dim); font-size:.68rem; font-weight:700; width:44px; text-align:right; flex-shrink:0}
+  .note{color:var(--dim); font-size:.64rem; text-align:center; margin:6px 0 12px}
+  .err{background:rgba(239,68,68,.1); color:#fca5a5; border:1px solid rgba(239,68,68,.35);
+    padding:10px 12px; border-radius:10px; font-size:.72rem; margin:10px 0}
+  .foot{color:var(--dim); font-size:.66rem; margin-top:18px; text-align:center; line-height:1.6}
+</style>
+</head>
+<body>
+  <div class="head">
+    <img src="icons/icon-192.png" alt="">
+    <div>
+      <h1>DGS BOLLX</h1>
+      <div class="sub">Sandstorm 🌪 · Holy Grail 🏆 · Jacobs Ladder 🪜 — checked fresh every open</div>
+    </div>
+  </div>
+  <div class="days" id="days"></div>
+  <div class="stats" id="stats"></div>
+  <div class="legend">
+    🏆 <b>Gold cup</b> — picked by <b>all three</b> apps (even bigger chance) &nbsp;·&nbsp;
+    🥈 <b>Silver</b> — two apps &nbsp;·&nbsp; 🥉 <b>Bronze</b> — any one app
+  </div>
+  <div class="src" id="src"></div>
+  <div id="body"><div class="note">checking all three apps…</div></div>
+  <div class="foot" id="foot">© Dave Court · DGS Bollx v1.0</div>
+<script>
+const APP_VER = "1.0";
+const APPS = [
+  { key: "S", cls: "c-a", name: "Sandstorm",
+    url: d => `https://jobsaboba.github.io/wonderland/data/${d}.json` },
+  { key: "G", cls: "c-b", name: "Holy Grail",
+    url: d => `https://jobsaboba.github.io/holy-grail/data/${d}.json` },
+  { key: "J", cls: "c-d", name: "Jacobs Ladder",
+    url: d => `https://jobsaboba.github.io/jacobs-ladder/data/${d}.json` },
+];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c =>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hnorm = s => String(s || "").toLowerCase().normalize("NFKD")
+  .replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
+const cnorm = s => hnorm(s).replace(/park$/, "");
+
+function londonToday(){
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/London" }).format(new Date());
+}
+function chips(){
+  const out = [];
+  const d = new Date(londonToday() + "T12:00:00Z");
+  for (let i = 0; i < 4; i++)
+    out.push(new Date(d.getTime() - i * 864e5).toISOString().slice(0, 10));
+  return out;
+}
+
+/* what counts as a pick for each app:
+   S — Sandstorm: r.sel (max three)
+   G — Holy Grail: runners ranked in the top three (TOP3 = the bets)
+   J — Jacobs Ladder: the finals list            */
+function extract(key, j){
+  const rows = [];
+  if (key === "S"){
+    for (const r of (j.races || []))
+      for (const s of (r.sel || []))
+        rows.push({ key, course: r.meeting, time: r.time, horse: s.horse,
+                    odds: s.odds, res: s.res });
+  } else if (key === "G"){
+    for (const r of (j.races || []))
+      for (const run of (r.runners || []))
+        if ((run.rank ?? 99) <= 3)
+          rows.push({ key, course: r.meeting, time: r.time, horse: run.horse,
+                      odds: run.odds, res: run.res });
+  } else if (key === "J"){
+    for (const r of (j.finals || []))
+      rows.push({ key, course: r.course, time: r.time, horse: r.horse,
+                  odds: r.odds, res: null });
+  }
+  return rows;
+}
+
+async function loadDay(dstr){
+  const cb = Date.now();
+  const badge = [];
+  const picks = await Promise.all(APPS.map(async (a, i) => {
+    try{
+      const r = await fetch(a.url(dstr) + "?cb=" + cb, { cache: "no-store" });
+      if (!r.ok) throw new Error("http " + r.status);
+      const j = await r.json();
+      const rows = extract(a.key, j);
+      badge[i] = { ok: true, n: rows.length, stamp: j.generated || j.updated || "" };
+      return rows;
+    }catch(e){
+      badge[i] = { ok: false, n: 0 };
+      return [];
+    }
+  }));
+
+  // join on course | time | horse
+  const groups = {};
+  for (const p of picks.flat()){
+    const k = [cnorm(p.course), p.time, hnorm(p.horse)].join("|");
+    (groups[k] ??= { srcs: [], odds: [], res: [] });
+    const g = groups[k];
+    if (!g.srcs.includes(p.key)) g.srcs.push(p.key);
+    if (p.odds && !g[`o${p.key}`]) g[`o${p.key}`] = p.odds;
+    if (p.res) g.res.push(p.res);
+  }
+  const list = Object.entries(groups).map(([k, g]) => {
+    const [course, time, horse] = k.split("|");
+    const res = (g.res.find(x => x === "WIN") || g.res[0] || null);
+    return { course, time, horse, apps: g.srcs,
+             odds: g.oS || g.oG || g.oJ || null, res };
+  });
+  list.sort((x, y) => (y.apps.length - x.apps.length) ||
+                      ((x.time || "").localeCompare(y.time || "")) ||
+                      String(x.course).localeCompare(String(y.course)) ||
+                      String(x.horse).localeCompare(String(y.horse)));
+  render(dstr, list, badge);
+}
+
+function render(dstr, list, badge){
+  const med = n => n >= 3 ? "🏆" : n === 2 ? "🥈" : "🥉";
+  const now = new Intl.DateTimeFormat("en-GB", { timeZone:"Europe/London",
+    hour:"2-digit", minute:"2-digit" }).format(new Date());
+  const nApps = n => list.filter(r => r.apps.length === n).length;
+  const nG = nApps(3), nS = nApps(2), nB = nApps(1);
+  document.getElementById("stats").innerHTML = `
+    <div class="stat g"><div class="v">${nG}</div><div class="l">GOLD · ALL 3</div></div>
+    <div class="stat sv"><div class="v">${nS}</div><div class="l">SILVER · 2 APPS</div></div>
+    <div class="stat bz"><div class="v">${nB}</div><div class="l">BRONZE · 1 APP</div></div>
+    <div class="stat tn"><div class="v">${list.length}</div><div class="l">PICKS ${dstr.slice(5).replace("-", "/")}</div></div>`;
+  document.getElementById("src").innerHTML = APPS.map((a, i) => {
+    const b = badge[i];
+    return `<span class="s ${b && b.ok ? "" : "bad"}">
+      <span class="k">${a.key}</span> ${esc(a.name)} ·
+      ${b && b.ok ? b.n + " picked" : "no day data"}</span>`;
+  }).join("");
+
+  const band = { 3: "🏆 ALL THREE — the real bets",
+                 2: "🥈 TWO apps agree",
+                 1: "🥉 singles — watch list" };
+  let out = "", cur = null;
+  for (const r of list){
+    const b = r.apps.length;
+    if (b !== cur){
+      if (cur !== null) out += `</div>`;
+      cur = b;
+      out += `<div class="rc"><div class="h2">
+        <span class="t">${band[cur]}</span>
+        <span class="c">${nApps(cur)}</span></div>`;
+    }
+    const pills = APPS.filter(a => r.apps.includes(a.key))
+      .map(a => `<span class="chip ${a.cls}">${a.key === "S" ? "🌪" : a.key === "G" ? "🏆" : "🪜"} ${a.key === "J" ? "JL" : a.key}</span>`).join("");
+    const resb = r.res ? `<span class="resb ${String(r.res).toLowerCase()}">${esc(String(r.res).toUpperCase())}</span>` : "";
+    out += `<div class="row">
+      <div class="m">${med(b)}</div>
+      <div class="who">
+        <div class="h">${esc(r.horse)}</div>
+        <div class="d">${esc(r.course)} · ${esc(r.time)}</div>
+        <div class="chips">${pills}</div>
+      </div>
+      <div>${resb}</div>
+      <div class="odds">${esc(r.odds || "")}</div>
+    </div>`;
+  }
+  if (cur !== null) out += `</div>`;
+  if (!list.length)
+    out = `<div class="note">no published picks for this day across the three apps yet</div>`;
+  document.getElementById("body").innerHTML = out;
+  document.getElementById("foot").innerHTML =
+    `© Dave Court · DGS Bollx v${APP_VER} · checked ${now} London`;
+}
+
+let DAY = null;
+function boot(){
+  const cs = chips();
+  DAY = DAY || londonToday();
+  if (!cs.includes(DAY)) cs.unshift(DAY);
+  document.getElementById("days").innerHTML = cs.map(d =>
+    `<button class="day ${d === DAY ? "on" : ""}" data-d="${d}">
+      ${d.slice(8)}/${d.slice(5, 7)}</button>`).join("");
+  document.querySelectorAll(".day").forEach(el =>
+    el.addEventListener("click", () => {
+      DAY = el.dataset.d; boot();
+    }));
+  document.getElementById("body").innerHTML =
+    `<div class="note">checking all three apps…</div>`;
+  loadDay(DAY);
+}
+boot();
+</script>
+</body>
+</html>

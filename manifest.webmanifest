@@ -1,0 +1,17 @@
+{
+  "id": "/dgs-bolx/",
+  "name": "DGS Bollx",
+  "short_name": "Bollx",
+  "description": "The dogs bollocks consensus board: every published pick from Sandstorm, The Holy Grail and Jacobs Ladder, cross-checked live. Gold cup = all three apps picked it, silver = two, bronze = one.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#0b1220",
+  "background_color": "#0b1220",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
